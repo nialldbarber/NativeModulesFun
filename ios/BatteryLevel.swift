@@ -17,16 +17,12 @@ class BatteryLevel: NSObject {
       
       let batteryState = UIDevice.current.batteryState
       if batteryState == .unknown {
-          // If battery state is unknown, reject the promise
           reject("E_UNAVAILABLE", "Battery level is unavailable", nil)
       } else {
-          // Get the battery level
           let batteryLevel = UIDevice.current.batteryLevel
           if batteryLevel < 0 {
-              // If battery level is unavailable, reject the promise
               reject("E_UNAVAILABLE", "Battery level is unavailable", nil)
           } else {
-              // Resolve the promise with the battery level as a percentage
               let batteryPercentage = batteryLevel * 100
               resolve(batteryPercentage)
           }
@@ -36,10 +32,5 @@ class BatteryLevel: NSObject {
   @objc
   static func requiresMainQueueSetup() -> Bool {
     return true;
-  }
-  
-  @objc
-  func constantsToExport() -> [String: Any]! {
-    return ["batteryLevel": 0];
   }
 }
