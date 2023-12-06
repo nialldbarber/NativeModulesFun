@@ -1,69 +1,29 @@
-import React, { useState } from "react";
-import {
-  NativeModules,
-  Platform,
-  Pressable,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-} from "react-native";
-
-const {
-  BatteryLevelModule: androidBatteryLevelModule,
-  BatteryLevel: iOSBatteryLevelModule,
-} = NativeModules;
+import React from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useGetBatteryLevel } from "./src/hooks/useGetBatteryLevel";
 
 function App() {
-  const [batteryLevel, setBatteryLevel] = useState(0);
-
-  async function getAndroidBatteryLevel() {
-    try {
-      const getLevel =
-        await androidBatteryLevelModule.getCurrentBatteryChargeLevel();
-      setBatteryLevel(getLevel);
-      console.log(`Battery level is: ${batteryLevel}`);
-    } catch (error) {
-      console.error(`Failed to get battery level: ${error}`);
-    }
-  }
-
-  // this _only_ works on a real device
-  // if it's a simulator, it craps out
-  async function getIosBatteryLevel() {
-    try {
-      const getLevel =
-        await iOSBatteryLevelModule.getCurrentBatteryChargeLevel();
-      console.log(getLevel);
-      setBatteryLevel(getLevel);
-    } catch (error) {
-      console.error(`Failed to get battery level: ${error}`);
-    }
-  }
+  const { batteryLevel, getBatteryLevel } = useGetBatteryLevel();
 
   return (
-    <SafeAreaView>
-      {Platform.OS === "android" ? (
-        <>
-          <Text>Battery level is {batteryLevel}</Text>
-          <Pressable style={styles.button} onPress={getAndroidBatteryLevel}>
-            <Text style={styles.buttonText}>Get Level</Text>
-          </Pressable>
-        </>
-      ) : (
-        <>
-          <Text>Battery level is {batteryLevel}</Text>
-          <Pressable style={styles.button} onPress={getIosBatteryLevel}>
-            <Text style={styles.buttonText}>Get Level</Text>
-          </Pressable>
-        </>
-      )}
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Text>Battery level is {batteryLevel}</Text>
+      <Pressable style={styles.button} onPress={getBatteryLevel}>
+        <Text style={styles.buttonText}>Get Level</Text>
+      </Pressable>
+    </View>
   );
 }
 
 export default App;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
+  },
   button: {
     backgroundColor: "#61C15C",
     padding: 20,
