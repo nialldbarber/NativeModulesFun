@@ -27,6 +27,8 @@ function App() {
     }
   }
 
+  // this _only_ works on a real device
+  // if it's a simulator, it craps out
   async function getIosBatteryLevel() {
     try {
       const getLevel =
